@@ -1,0 +1,150 @@
+{% extends "layout/app_layout.jinja2" %}
+{% import 'parts/forms.jinja2' as forms %}
+
+
+{% block header %}
+    <div class="jm-header">
+        <div class="jm-header-inner">
+            <div class="row">
+                <div class="container">
+                    <h2 class="jm-header__title">
+                        Profile Settings
+                    </h2>
+                    <div class="jm_setting_tabs">
+                        <ul class="jm_setting_tabs-list">
+                            <li>
+                                <span class="active" data-tab="jm-setting-profile">PROFILE</span>
+                            </li>
+                            <li>
+                                <span data-tab="jm-setting-password">PASSWORD</span>
+                            </li>
+                            <li>
+                                <span data-tab="jm-setting-onganization">ORGANIZATION</span>
+                            </li>
+                            <li>
+                                <p>SETTINGS</p>
+                            </li>
+                            <li>
+                                <a href="{{ url('logout') }}">LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="jm-content">
+        <div class="jm-content-inner">
+            <div class="jm-setting-tab-content setting-tab-content-profile" id="jm-setting-profile">
+                <div class="login-box">
+                    <div class="login-content">
+                        <h2 class="login-title text-center">Profile</h2>
+                        <div class="setting-tab-content-profile-upload text-center">
+                            <div class="setting-tab-content-profile-upload-image">
+                                <img src="{{ static_url('media/minion.jpg') }}">
+                            </div>
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <span class="setting-tab-content-profile-upload-btn"><span>CHANGE PICTURE</span><input type="file" /></span>
+                            </div>
+                        </div>
+                        <form class="login-form">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" value="Brian">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" value="Severson">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" value="brian@digitalartefacts.com">
+                            </div>
+                            <div class="btn-login">
+                                <button type="submit" class="btn">Update Settings</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="jm-setting-tab-content setting-tab-content-password" id="jm-setting-password">
+                <div class="login-box">
+                    <div class="login-content">
+                        <h2 class="login-title text-center">Password</h2>
+
+                        {{ forms.form(csrf_token=csrf_token, id='login-form', action=url('account.changepassword'), styles='login-form')}}
+
+                            {{ forms.password_field(label='Old Password', name='old_password') }}
+
+                            {{ forms.password_field(label='New Password', name='new_password') }}
+
+                            {{ forms.password_field(label='Retype New Password', name='confirm_password') }}
+
+                            <p class="error-message">
+                                {% if form.has_error or error %}
+                                    <span class="text-danger">{{ form.error_message() or error }}</span>
+                                {% endif %}
+                            </p>
+
+                            <div class="btn-login">
+                            {{ forms.raw_button(_('Update Password'), styles='btn') }}
+                            </div>
+
+                        {{ forms.endform() }}
+                    </div>
+                </div>
+            </div>
+            <div class="jm-setting-tab-content setting-tab-content-organization" id="jm-setting-onganization">
+                <div class="login-box">
+                    <div class="login-content">
+                        <h2 class="login-title text-center">Organization</h2>
+                        <form class="login-form">
+                            <div class="form-group">
+                                <label>Organization Name</label>
+                                <input type="text" class="form-control" placeholder="" value="Journimap">
+                            </div>
+                            <div class="form-group">
+                                <label>Your Title or Role</label>
+                                <input type="text" class="form-control" placeholder="" value="Director">
+                            </div>
+
+
+                              {{ forms.select_option(label='Organization Type', name='type', options=[('', ''),
+                                                                   ('nonprofit-organization', 'Nonprofit Organization'),
+                                                                   ('startup', 'Startup'),
+                                                                   ('small-or-midsize-business', 'Small or Midsize Business'),
+                                                                   ('large_business', 'Large Business'),
+                                                                   ('government', 'Government'),
+                                                                   ('other', 'Other')]) }}
+
+                               {{ forms.select_option(label='Focus', name='focus', options=[('', ''),
+                              ('mission-drive-services', 'Mission - drive services'),
+                              ('healthcare', 'Healthcare'),
+                              ('education', 'Education'),
+                              ('technology', 'Technology'),
+                              ('partnership', 'Public / Private partnership'),
+                              ('other', 'Other')]) }}
+
+
+
+                {{ forms.select_option(label='Network', name='network', options=[('', ''),
+                              ('linkedIn', 'LinkedIn'),
+                              ('twitter', 'Twitter'),
+                              ('facebook', 'Facebook'),
+                              ('instagram', 'Instagram'),
+                              ('other', 'Other')]) }}
+
+                            <div class="btn-login">
+                                <button type="submit" class="btn">Update Organizational Information</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block footer %}{% endblock footer %}

@@ -1,0 +1,11 @@
+version: "3"
+services:  
+  postgres:
+    image: postgres:9.6
+    volumes:
+      - /opt/tmp/drive:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+    ports:
+      - "5432:5432"

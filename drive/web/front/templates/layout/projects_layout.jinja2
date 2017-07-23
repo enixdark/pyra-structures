@@ -1,0 +1,21 @@
+{% extends "base.jinja2" %}
+{% from "parts/logo.jinja2" import login_logo with context %}
+{% set bg_wrapper = 'bg-landing2' %}
+{% block main %}
+
+    <div class="bg-landing2">
+        <div class="container">
+            <div class="landing-header">
+                {% block header %}
+                    {{ login_logo() }}
+                {% endblock %}
+            </div>
+
+            {% block content %}
+                <p>No content</p>
+            {% endblock content %}
+
+        </div>
+    </div>
+
+{% endblock %}

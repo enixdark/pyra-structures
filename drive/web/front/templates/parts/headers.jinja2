@@ -1,0 +1,114 @@
+{% import "parts/forms.jinja2" as forms %}
+
+{% macro project_header(name='', state='', about='', sub_tabs = false, active=true, action = request.matchdict['action'], id = request.matchdict['id']) %}
+    <div class="jm-header jm-header-parent">
+        <div class="jm-header-inner">
+            <div class="row">
+                <div class="container">
+                    <div class="col-md-6 jm-header__parent--left">
+                        <h2 class="jm-header__parent__title ">
+                            {{ name }}
+                        </h2>
+                        <p class="pull-left jm-header__link"><a href="{{ about_url }}">About</a> <a href="" class="jm-header__copy">Copy</a> <a href="">Share</a></p>
+                        <div class="pull-left jm-header__toogle">
+                            <div id="toggles">
+                                <input type="checkbox" name="checkbox1" id="checkbox1" class="ios-toggle" {% if state == 'public' %} {{ 'checked' }} {% endif %}/>
+                                <label for="checkbox1" class="checkbox-label" data-off="off" data-on="on"></label>
+                            </div>
+{#                            <p>Project is {% if state == 'public' %} {{ 'Public' }} {% else %} {{ 'Private' }} {% endif %}</p>#}
+                              <p></p>
+
+                        </div>
+                    </div>
+                    <div class="jm-header__menu--right col-md-6">
+                        <div class="jm-header__menu{% if active %}{{' active'}}{% endif %}">
+                        {% if not active %}
+                            <a href="#" class="disabled">Research</a>
+                            <a href="#" class="disabled">Persona</a>
+                            <a href="#" class="disabled">Empathy Map</a>
+                            <a href="#" class="disabled">Customer Journey</a>
+                            <a href="#" class="disabled">Journimap™ </a>
+                            <div class="arrow_box">
+                                These features require the project be activated and completed.
+                            </div>
+                        {% else %}
+                            <a href="{{ url('active.project', action='research', id=id) }}" class="disabled{% if action == 'research' %}{{ ' active' }}{% endif %}">Research</a>
+                            <a href="{{ url('active.project', action='persona', id=id) }}" class="disabled{% if action == 'persona' %}{{ ' active' }}{% endif %}">Persona</a>
+                            <a href="{{ url('active.project', action='empathy-map', id=id) }}" class="disabled{% if action == 'empathy-map' %}{{ ' active' }}{% endif %}">Empathy Map</a>
+                            <a href="{{ url('active.project', action='customer-journey', id=id) }}" class="disabled{% if action == 'customer-journey' %}{{ ' active' }}{% endif %}">Customer Journey</a>
+                            <a href="{{ url('active.project', action='journimap', id=id) }}" class="disabled{% if action == 'journimap' %}{{ ' active' }}{% endif %}">Journimap™ </a>
+                        {% endif %}
+
+                        </div>
+                        <p class="pull-right jm-header__created">Create by Brian(You) February 15, 2017</p>
+                    </div>
+                </div>
+                {% if sub_tabs %}
+                    <div class="container">
+                        <div class="dn-15-tabs">
+                            <div class="jm_setting_tabs">
+                                <ul class="jm_setting_tabs-list">
+                                    <li>
+                                        <span class="active"  data-tab="jm-dn15-questions">QUESTIONS</span>
+                                    </li>
+                                    <li>
+                                        <span data-tab="jm-dn-15-pesponses">RESPONSES</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{% macro active_project(title = 'Active Projects', route_name='project') %}
+    <div class="jm-header">
+        <div class="jm-header-inner">
+            <div class="row">
+                <div class="container">
+                    <h2 class="jm-header__title">
+                        {{ title }}
+                    </h2>
+                    <div class="jm-header__search">
+                        {{ forms.form(csrf_token=false, action=url(route_name, action=request.matchdict['action'], id=''), method='get', id='search-form') }}
+                            <input name="search" type="text" value="{{ 'search' in request.GET and request.GET['search'] or '' }}" placeholder="&#xf002; Search {{ title }}">
+                        {{ forms.endform() }}
+                    </div>
+                    <div class="jm-header__sort">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Sort by
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="{{ url(route_name, action=request.matchdict['action'], id='', _query={'sort': 'newest'}) }}">Newest</a></li>
+                                <li><a href="{{ url(route_name, action=request.matchdict['action'], id='', _query={'sort': 'oldest'}) }}">Oldest</a></li>
+                                <li><a href="{{ url(route_name, action=request.matchdict['action'], id='', _query={'sort': 'a-z'}) }}">A - Z</a></li>
+                                <li><a href="{{ url(route_name, action=request.matchdict['action'], id='', _query={'sort': 'z-a'}) }}">Z - A</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro featured_project(title = 'Active Projects') %}
+    <div class="jm-header">
+        <div class="jm-header-inner">
+            <div class="row">
+                <div class="container">
+                    <h2 class="jm-header__title">
+                        {{ title }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

@@ -1,0 +1,18 @@
+
+{% macro login_logo() %}
+    <div class="landing-logo text-left">
+        <a href="{{ url('home') }}"><img src="{{ static_url('media/logo-login.png') }}"></a>
+    </div>
+{% endmacro %}
+
+{% macro landing_logo() %}
+    <div class="landing-logo text-left">
+        <a href="{{ url('home') }}"><img src="{{static_url('media/logo-landing.png')}}"></a>
+    </div>
+{% endmacro %}
+
+{% macro organization_logo() %}
+    <div class="landing-logo text-left">
+        <a href="{{ url('home') }}"><img src="{{static_url('media/onboarding-organization.png')}}"></a>
+    </div>
+{% endmacro %}

@@ -1,0 +1,85 @@
+
+{% macro box(project=none, info=true) %}
+    {% if project is not none %}
+    <div class="jm-list-projects-item">
+        <div class="jm-list-projects-item-inner">
+
+            <p class="projects-item__status">
+                <i class="fa {% if project.visibility =='public' %}fa-eye{% else %}fa-eye-slash{% endif %}" aria-hidden="true"></i>
+                <span>{{ project.visibility }}</span>
+            </p>
+            <div class="projects-item-header">
+                <h3 class="projects-item-header__title">
+                    {{ project.title or 'Project name' }}
+                </h3>
+                <p class="projects-item-header__date">
+                    {{ project.start_date|todate('%B %d, %Y') }}
+                </p>
+            </div>
+            {% if info %}
+                {% if (project.surveys[0].results|length) >= 15 %}
+                    <div class="jm-list-active-projects-item__shares text-center">
+                        <a href="{{ url('active.project', action='view', id=project.slug) }}">
+                            <p class="text-active-projects">All Surveys Completed</p>
+                            <h3 class="title-active-projects"><i class="fa fa-check-circle" aria-hidden="true"></i> ACTIVATE</h3>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="projects-item__shares">
+                        <span>{{ project.surveys[0].results|length }} of 15</span> Surveys Taken
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="projects-item__shares">
+                    <span>23</span> Shares
+                </div>
+            {% endif %}
+
+            <div class="projects-item-footer">
+                <a href="#" class="projects-item-footer__copy" data-toggle="tooltip" data-placement="bottom" title="Upcoming feature">
+                    <i class="fa fa-copy" aria-hidden="true"></i>
+                    <span>
+                        COPY
+                    </span>
+                </a>
+                <a href="#" class="projects-item-footer__share" data-toggle="tooltip" data-placement="bottom" title="Upcoming feature">
+                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                    <span>
+                        Share
+                    </span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {% endif %}
+
+{% endmacro %}
+
+{% macro quit_modal(id='', text=none, label='', next='') %}
+    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ label }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="app-create-project-modal-text">
+                        {% if text %}
+                            {{ text|safe }}
+                        {% else %}
+                            {{ 'Are you sure you want to quit? You will <span>lose <br/>all of your progress</span> if you quit now.'|safe}}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="modal-footer app-create-project-modal-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-left" data-dismiss="modal">No, I want to continue</button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ next }}" type="button" class="btn btn-orange">Yes, I want to quit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

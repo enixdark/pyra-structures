@@ -1,0 +1,27 @@
+{% extends "layout/app_layout.jinja2" %}
+{% from "parts/project.jinja2" import box with context %}
+{% from "parts/headers.jinja2" import active_project with context %}
+
+{% block header %}
+    {{ active_project(title='Notifications', route_name='notification') }}
+{% endblock header %}
+
+{% block content %}
+    <div class="jm-content">
+        <div class="jm-content-inner">
+            <div class="sheet-notifications">
+                {% for p in active_projects %}
+                    {% if p %}
+                        <div class="sheet-notifications__item">
+                            <h2>{{ p.title }} is <a href="{{ url('active.project', action='view', id=p.slug) }}">ready to be activated.</a></h2>
+                            <p>All {{ p.results|length }} surveys have been completed and you are now ready to activate this study.</p>
+                            <a class="link-details" href="{{ url('active.project', action='view', id=p.slug) }}">VIEW</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}

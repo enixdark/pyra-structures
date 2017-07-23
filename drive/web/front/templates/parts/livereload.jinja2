@@ -1,0 +1,4 @@
+{%- set livereload_url = request.registry.settings.get('livereload_url') -%}
+{%- if livereload_url %}
+<script src="{{ livereload_url }}"></script>
+{% endif -%}

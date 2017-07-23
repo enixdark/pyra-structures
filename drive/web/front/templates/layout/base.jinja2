@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    {% block head_meta %}
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    {% endblock head_meta %}
+
+    <title>{% block title %}Drive{% endblock title %}</title>
+
+    {% block shared_styles %}
+        <link rel="icon" type="image/x-icon" href="{{ static_url('media/favicon.ico') }}">
+        <link rel="stylesheet" href="{{static_url('css/common.css')}}">
+        <link rel="stylesheet" href="{{static_url('css/main.css')}}">
+    {% endblock shared_styles %}
+
+    {% block styles %}
+        {# styles #}
+    {% endblock styles %}
+
+    {% block head_scripts %}
+        <script>
+          var STATIC_URL_ROOT = "{{ static_url('') }}";
+        </script>
+        {% if use_asset_manifest %}
+            <script src={{ static_url('js/manifest.js') }}></script>
+        {% endif %}
+    {% endblock head_scripts %}
+
+</head>
+<body {{ body_class and 'class=' + body_class }}>
+    {% block flash %}
+        {% include 'parts/flash.jinja2' %}
+    {% endblock flash %}
+
+    {% block main %}
+        <p>No content</p>
+    {% endblock main %}
+
+    {% block shared_scripts %}
+        {% include 'parts/livereload.jinja2' %}
+        {% include 'parts/analytics.jinja2' %}
+
+        <script src="{{static_url('js/common.js')}}"></script>
+    {% endblock shared_scripts %}
+
+    {# script of each page #}
+    {% if script is not undefined and script is not none %}
+        <script src="{{static_url('js/' +script+ '.js')}}"></script>
+    {% endif %}
+
+    {# scripts of each page #}
+    {% if scripts is not undefined and scripts is not none %}
+        {% for script in scripts %}
+            <script src="{{static_url('js/' +script+ '.js')}}"></script>
+        {% endfor %}
+    {% endif %}
+
+    {% block scripts %}
+        <script src="{{static_url('js/main.js')}}"></script>
+        {# inline scripts #}
+    {% endblock scripts %}
+
+</body>
+</html>

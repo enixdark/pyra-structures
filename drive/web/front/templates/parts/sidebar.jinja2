@@ -1,0 +1,104 @@
+<div class="jm-sidebar-inner">
+    <div class="jm-sidebar__logo">
+        <a href="{{ url('home') }}"><img src="{{ static_url('media/logo.png') }}"></a>
+    </div>
+    <div class="jm-sidebar__notifications">
+        <a href="{{ url('notification') }}">
+            <span class="notifications-icon{% if active_projects|len > 0 %} has{% endif %}">
+                <i class="fa fa-bell"></i>
+            </span>
+            NOTIFICATIONS
+        </a>
+    </div>
+    <div class="jm-sidebar-menu">
+        <div class="jm-sidebar-menu-list">
+            <ul>
+                <li>
+                    <a href="{{ url('home') }}" class="sidebar-menu__item sidebar-menu__item--active">ACTIVE
+                        <span>
+                        PROJECTS
+                            </span>
+                        <i class="material-icons">add_circle_outline</i>
+                    </a>
+                </li>
+                {% for p in active_projects %}
+                    {% if p %}
+                    <li>
+                        <a href="{{ url('active.project', action='view', id=p.slug) }}" class="sidebar-menu__item">{{ p.title or 'Project name' }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="jm-sidebar-menu-list">
+
+            <ul>
+                <li>
+                    <a href="#" class="sidebar-menu__item sidebar-menu__item--active">
+                        <span>
+                        COMPLETED PROJECTS
+                            </span>
+                    </a>
+                </li>
+                {% for p in completed_projects %}
+                    {% if p %}
+                    <li>
+                        <a href="{{ url('active.project', action='persona', id=p.slug) }}" class="sidebar-menu__item">{{ p.title or 'Project name' }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="jm-sidebar-menu-list">
+            <ul>
+                <li>
+                    <a href="#" class="sidebar-menu__item sidebar-menu__item--active">
+                        <span>
+                        PUBLIC LIBRARY
+                        </span>
+                    </a>
+
+                </li>
+                <li>
+                    <a href="{{ url('project', action='featured', id='') }}" class="sidebar-menu__item">Featured</a>
+                </li>
+                <li>
+                    <a href="{{ url('project', action='popular', id='') }}" class="sidebar-menu__item">Popular</a>
+                </li>
+                <li>
+                    <a href="{{ url('project', action='new-this-week', id='') }}" class="sidebar-menu__item">New This Week!</a>
+                </li>
+                <li class="active">
+                    <a href="#" class="sidebar-menu__item">By Sector</a>
+                    <ul class="siderbar-menu__sub">
+                        <li>
+                            <a href="#">item</a>
+                        </li>
+                        <li>
+                            <a href="#">item</a>
+                        </li>
+                        <li>
+                            <a href="#">item</a>
+                        </li>
+                        <li>
+                            <a href="#">item</a>
+                        </li>
+                        <li>
+                            <a href="#">item</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ url('project', action='all', id='') }}" class="sidebar-menu__item">All Projects</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="jm-sidebar__profile-setting">
+        <a href="{{ url('account.profile') }}">
+            <img src="{{ static_url('media/icon-setting.png') }}">
+            Profile Settings
+        </a>
+    </div>
+</div>

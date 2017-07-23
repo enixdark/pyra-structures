@@ -1,0 +1,24 @@
+{#{% macro render_flash(key, cls) %}#}
+{#{% if request.session.peek_flash(key) %}#}
+{#    {% for msg in request.session.pop_flash(key) %}#}
+{#<div class="flash-area">#}
+{#  <div class="flash-item">#}
+{#    <div class="alert alert-{{ cls }} alert-dismissible" role="alert">#}
+{#      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#      {{ msg }}#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+{#    {% endfor %}#}
+{#{% endif %}#}
+{#{% endmacro %}#}
+{##}
+{#<div class="site-flash">#}
+{#  <div class="container-fluid">#}
+{#    {{ render_flash('', 'info') }}#}
+{#    {{ render_flash('info', 'info') }}#}
+{#    {{ render_flash('success', 'success') }}#}
+{#    {{ render_flash('warning', 'warning') }}#}
+{#    {{ render_flash('error', 'danger') }}#}
+{#  </div>#}
+{#</div>#}

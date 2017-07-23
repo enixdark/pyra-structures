@@ -1,0 +1,30 @@
+{% extends "layout/app_layout.jinja2" %}
+{% from "parts/project.jinja2" import box with context %}
+{% from "parts/headers.jinja2" import active_project with context %}
+
+{% block header %}
+    {{ active_project(route_name='home') }}
+{% endblock header %}
+
+{% block content %}
+    <div class="jm-content">
+        <div class="jm-content-inner">
+            <div class="jm-list-projects jm-list-active-projects">
+                <div class="jm-list-projects-item jm-list-active-projects-item">
+                    <div class="jm-list-projects-item-inner jm-list-active-projects-item-content-left">
+                        <div class="text-center">
+                            <a href="{{ url('project', action='create', id='') }}" class="image"><img
+                                    src="{{ static_url('media/rounded-add-button.png') }}"/></a><br/>
+                            <a href="{{ url('project', action='create', id='') }}" class="text">Create a New Project</a>
+                        </div>
+                    </div>
+                </div>
+                {% for project in projects %}
+                    {{ box(project) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}

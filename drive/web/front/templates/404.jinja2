@@ -1,0 +1,9 @@
+{% extends 'layout/base.jinja2' %}
+
+{% block main %}
+<div class="text-center">
+  <h2>404 Not Found</h2>
+  <p>Oh no, you found a broken link.</p>
+  <a href="{{ request.route_url('home') }}">Go Home</a>
+</div>
+{% endblock main %}

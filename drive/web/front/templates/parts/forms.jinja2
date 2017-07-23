@@ -1,0 +1,302 @@
+{% macro make_unique_id(prefix) %}{{ prefix~'-'~uuid4().hex[:8] }}{% endmacro %}
+
+{% macro form(styles='', id=none, csrf_token=none, action=none, method=none, enctype=False) %}
+<form
+  method={{ method or "post" }}
+  {% if action %}action="{{ action }}"{% endif -%}
+  accept-charset="UTF-8"
+  class="{{ styles }}"
+  {% if enctype %}
+     enctype="multipart/form-data"
+  {% endif %}
+  {% if id is not none %}id={{ id }}{% endif %}>
+  {% if csrf_token is not false %}
+  {{ hidden('csrf_token', csrf_token | required) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro hform(styles='', id=none, csrf_token=none, action=none) %}
+  {{ form('form-horizontal ' ~ styles, id, csrf_token, action) }}
+{% endmacro %}
+
+{% macro endform() %}
+</form>
+{% endmacro %}
+
+{% macro text_field(name, label=none, errors=none, placeholder=none, required=false, value=none, input_styles='', label_styles='', input_id=none, type_='text', autofocus=false, helptext=none, help_text=none, disabled=false, readonly=false) %}
+{% set fid = input_id or make_unique_id(name) %}
+<div class="form-group {% if errors %}has-error{% endif %}">
+  <label for="{{ fid }}" data-name="{{ name }}" class="control-label {{ label_styles }}">
+    {% if label %}{{ label }}{% endif %}
+    {% if caller %}{{ caller() }}{% endif %}
+  </label>
+  <div class="{{ input_styles }}">
+    <input id="{{ fid }}" class="form-control"
+           type="{{ type_ }}"
+           name="{{ name }}"
+           {% if required %} required{% endif %}
+           {% if autofocus %} autofocus{% endif %}
+           {% if disabled %} disabled{% endif %}
+            {% if readonly %} readonly{% endif %}
+           {% if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+           {% if value is not none %} value="{{ value }}"{% endif %}>
+    {% if helptext %}
+        <span class="help-block">{{ helptext }}</span>
+    {% endif %}
+    {% if help_text %}
+        <p class="text-right-form">{{ help_text }}</p>
+    {% endif %}
+    {% for error in errors or [] %}
+        <span class="help-block"><span class='icon-warning'></span> {{ error }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro email_field(name, label=none, errors=none, placeholder=none, required=false, value=none, input_styles='', label_styles='', input_id=none, type_='email', autofocus=false, helptext=none, disabled=false) %}
+  {% call text_field(name, label, errors, placeholder, required, value, input_styles, label_styles, input_id, type_, autofocus, helptext, disabled) %}
+    {% if caller %}{{ caller() }}{% endif %}
+  {% endcall %}
+{% endmacro %}
+
+{% macro password_field(name, label=none, errors=none, placeholder=none, required=false, input_styles='', label_styles='', input_id=none, type_='password', autofocus=false, helptext=none,help_text=none, disabled=false) %}
+  {% call text_field(name, label, errors, placeholder, required, value, input_styles, label_styles, input_id, type_, autofocus, helptext, disabled) %}
+    {% if caller %}{{ caller() }}{% endif %}
+     {% if helptext %}
+        <span class="help-block">{{ helptext }}</span>
+    {% endif %}
+    {% if help_text %}
+        <p class="text-right-form">{{ help_text }}</p>
+    {% endif %}
+  {% endcall %}
+{% endmacro %}
+
+{% macro date_field(name, label=none, errors=none, placeholder=none, required=false, value=none, input_styles='', label_styles='', input_id=none, type_='date', autofocus=false, helptext=none, disabled=false) %}
+  {% call text_field(name, label, errors, placeholder, required, value, input_styles, label_styles, input_id, type_, autofocus, helptext, disabled) %}
+    {% if caller %}{{ caller() }}{% endif %}
+  {% endcall %}
+{% endmacro %}
+
+{% macro textarea_field(name, label=none, rows=5, errors=none, required=false, value='', placeholder='', input_styles='form-control-textarea', label_styles='', input_id=none, autofocus=false, disabled=false) %}
+{% set fid = input_id or make_unique_id(name) %}
+<div class="form-group {% if errors %}has-error{% endif %}">
+  <label for="{{ name }}" class="control-label {{ label_styles }}">
+    {% if label %}{{ label }}{% endif %}
+    {% if caller %}{{ caller() }}{% endif %}
+  </label>
+  <div class="{{ input_styles }}">
+    <textarea id="{{ fid }}" class="form-control" placeholder="{{ placeholder }}"
+           rows="{{ rows }}"
+           name="{{ name }}"
+           {% if required %}required{% endif %}
+           {% if disabled %}disabled{% endif %}
+           {% if autofocus %}autofocus{% endif %}>{{ value }}</textarea>
+    {% for error in errors or [] %}
+    <span class="help-block"><span class='icon-warning'></span> {{ error }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro static_field(label=none, value=none, input_styles='', label_styles='') %}
+<div class="form-group">
+  <label class="control-label {{ label_styles }}">
+    {% if label %}{{ label }}{% endif %}
+    {% if caller %}{{ caller() }}{% endif %}
+  </label>
+  <div class="{{ input_styles }}">
+    <p class="form-control-static">{{ value }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro checkbox_field(name, value, checked=false, styles='', required=false, errors=none, disabled=false) %}
+<div class="form-group {% if errors %}has-error{% endif %}">
+  <div class="{{ styles }}">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"
+               name="{{ name }}"
+               value="{{ value }}"
+               {% if required %}required{% endif %}
+               {% if disabled %}disabled{% endif %}
+               {% if checked %}checked{% endif %}>
+        {{ caller() }}
+      </label>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro radio_group(name, label=none, errors=none, input_styles='', label_styles='', helptext=none) %}
+<div class="form-group {% if errors %}has-error{% endif %}">
+  <label class="control-label {{ label_styles }}">
+    {% if label %}{{ label }}{% endif %}
+  </label>
+  <div class="{{ input_styles }}">
+    {{ caller() }}
+    {% if helptext %}
+    <span class="help-block">{{ helptext }}</span>
+    {% endif %}
+    {% for error in errors or [] %}
+    <span class="help-block"><span class='icon-warning'></span> {{ error }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro radio_button(name, label=none, value='', required=false, checked=false, label_styles='radio', disabled=false) %}
+  <label class="{{ label_styles }}">
+    <input type="radio" name="{{ name }}" value="{{ value }}"
+    {%- if checked %} checked{% endif -%}
+    {%- if disabled %} disabled{% endif -%}
+    {%- if required %} required{% endif %}>
+      {%- if label %}{{ label }}{% endif -%}
+      {%- if caller %}{{ caller() }}{% endif -%}
+    </input>
+  </label>
+{% endmacro %}
+
+{% macro select_group(name, label=none, errors=none, required=false, input_styles='', label_styles='', input_id=none, autofocus=false, helptext=none, disabled=false, multiple=false, size=none) %}
+{% set fid = input_id or make_unique_id(name) %}
+<div class="form-group {% if errors %}has-error{% endif %}">
+  {% if label %}
+  <label for="{{ fid }}" class="control-label {{ label_styles }}">{{ label }}</label>
+  {% endif %}
+  <div class="{{ input_styles }}">
+    <select id="{{ fid }}" class="form-control"
+           name="{{ name }}"
+           {% if size %}size="{{size}}"{% endif %}
+           {% if multiple %}multiple{% endif %}
+           {% if required %}required{% endif %}
+           {% if autofocus %}autofocus{% endif %}
+           {% if disabled %}disabled{% endif %}>
+    {{ caller() }}
+    </select>
+    {% if helptext %}
+    <span class="help-block">{{ helptext }}</span>
+    {% endif %}
+    {% for error in errors or [] %}
+    <span class="help-block"><span class='icon-warning'></span> {{ error }}</span>
+    {% endfor %}
+   </div>
+</div>
+{% endmacro %}
+
+{% macro select_option(value, label=none, name='', class=none, options=None, range=None, default=none, label_styles=none, disabled=false) %}
+    {% set fid = input_id or make_unique_id(name) %}
+    <div class="form-group">
+        <label for="{{ fid }}" data-name="{{ name }}" class="control-label {{ label_styles }}">
+            {{ label or '' }}
+        </label>
+        <select id="{{ fid }}" style="height: 0; padding: 0; margin: 0; width: 0;" name="{{ name }}" class="{{ 'form-control '+(class or '') }}">
+        {% if range is not none %}
+            {% for val in range %}
+                <option value="{{ val }}" {% if val == default %}selected{% endif %} {% if disabled %}disabled{% endif %}>
+                    {{ val }}
+                </option>
+            {% endfor %}
+        {% endif %}
+        {% if options is not none %}
+            {% for val,text in options %}
+                <option value="{{ val }}" {% if val == default %}selected{% endif %} {% if disabled %}disabled{% endif %}>
+                    {{ text }}
+                </option>
+            {% endfor %}
+        {% endif %}
+        </select>
+
+        <div id="select-{{ name }}" data-name="{{ name }}" class="form-control-select form-control-select-has-placeholder">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle form-control" type="button" data-toggle="dropdown">
+                    <span class="selected-data">
+                        {% if default is not none %}
+                            {% if range is not none %}
+                                {% for val in range %}
+                                    {% if val == default %}
+                                        {{ val }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if options is not none %}
+                                {% for val,text in options %}
+                                    {% if val == default %}
+                                        {{ text }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% else %}
+                            Select One
+                        {% endif %}
+                    </span>
+                    <span class="glyphicon glyphicon-triangle-bottom"></span>
+                </button>
+                <ul class="dropdown-menu">
+                {% if range is not none %}
+                    {% for i in range %}
+                        <li><a data-type="{{ i }}" data-value="{{ i }}" href="#">{{ i }}</a></li>
+                    {% endfor %}
+                {% endif %}
+                {% if options is not none %}
+                    {% for choice in options %}
+                        {% if choice[0] != ''  %}
+                            <li><a data-type="{{ choice[0] }}" data-value="{{ choice[1] }}" href="#">{{ choice[1] }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro datetimepicker(name='', label='') %}
+    {% set fid = input_id or make_unique_id(name) %}
+    <div class="form-group has-icon-right has-datetimepicker">
+        <label for="{{ fid }}" data-name="{{ name }}">{{ label }}</label>
+        <div class="input-group date" id="datetimepicker-{{ name }}">
+            <input id="{{ fid }}" name="{{ name }}" type='text' class="form-control"/>
+            <span class="input-group-addon">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+            </span>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro error_message(form=none, message=none) %}
+    <p class="error-message">
+        {% if (form is not undefined and form.has_error) or message %}
+            <span class="text-danger">{{ form.error_message() or message }}</span>
+        {% endif %}
+    </p>
+{% endmacro %}
+
+{% macro hidden(name, value) %}
+<input type="hidden" name="{{ name }}" value="{{ value }}">
+{% endmacro %}
+
+{% macro file(name, accept, id='') %}
+<input type="file" name="{{ name }}" accept="{{ accept }}" id="{{ id }}">
+{% endmacro %}
+
+{% macro raw_button(title, styles='', name='', value='', id=none, disabled=false) %}
+  <button type="submit" class="{% if styles %} {{ styles }}{% endif %}"
+    {%- if id %} id="{{ id }}"{% endif -%}
+    {%- if disabled %} disabled{% endif -%}
+    {%- if name != '' %} name="{{name}}"{% endif -%}
+    {%- if value != '' %} value="{{value}}"{% endif %}>{{ title }}</button>
+  {% if caller %}{{ caller() }}{% endif %}
+{% endmacro %}
+
+{% macro button(title, styles='', name='', value='', id=none, disabled=false) %}
+  {% call raw_button(title, 'btn btn-default ' + styles, name, value, id, disabled) %}
+    {% if caller %}{{ caller() }}{% endif %}
+  {% endcall %}
+{% endmacro %}
+
+{% macro submit_button(title, styles='', name='', value='', id=none, disabled=false) %}
+  {% call raw_button(title, 'btn btn-primary ' + styles, name, value, id, disabled) %}
+    {% if caller %}{{ caller() }}{% endif %}
+  {% endcall %}
+{% endmacro %}
