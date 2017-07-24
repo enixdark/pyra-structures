@@ -1,0 +1,66 @@
+{% from "parts/logo.jinja2" import organization_logo with context %}
+{% import 'parts/forms.jinja2' as forms %}
+
+{% extends "layout/landing_layout.jinja2" %}
+
+{% set bg_wrapper = 'bg-landing2' %}
+
+{% set script = 'validator' %}
+
+{% block header %}
+    {{ organization_logo() }}
+{% endblock %}
+
+{% block content %}
+    <div class="login-box">
+        <div class="login-content">
+            <h3 class="onboarding-organization-data-title text-center">Welcome to Journimap, {{ request.user.first_name }}!</h3>
+            <p class="onboarding-organization-data-text">Tell us about your organization and your role in that organization.</p>
+
+
+            {{ forms.form(csrf_token=csrf_token, id='organization-form', action=url('organization'), styles='login-form')}}
+
+                {{ forms.text_field(label='Organization Name', name='name') }}
+
+                {{ forms.text_field(label='Your Title or Role', name='role') }}
+
+                {{ forms.select_option(label='Organization Type', name='type', options=[('', ''),
+                                                                   ('nonprofit-organization', 'Nonprofit Organization'),
+                                                                   ('startup', 'Startup'),
+                                                                   ('small-or-midsize-business', 'Small or Midsize Business'),
+                                                                   ('large_business', 'Large Business'),
+                                                                   ('government', 'Government'),
+                                                                   ('other', 'Other')]) }}
+
+
+                {{ forms.select_option(label='Focus', name='focus', options=[('', ''),
+                              ('mission-drive-services', 'Mission - drive services'),
+                              ('healthcare', 'Healthcare'),
+                              ('education', 'Education'),
+                              ('technology', 'Technology'),
+                              ('partnership', 'Public / Private partnership'),
+                              ('other', 'Other')]) }}
+
+
+
+                {{ forms.select_option(label='Network', name='network', options=[('', ''),
+                              ('linkedIn', 'LinkedIn'),
+                              ('twitter', 'Twitter'),
+                              ('facebook', 'Facebook'),
+                              ('instagram', 'Instagram'),
+                              ('other', 'Other')]) }}
+
+                <p class="error-message">
+                    {% if form.has_error or error %}
+                        <span class="text-danger">{{ form.error_message() or error }}</span>
+                    {% endif %}
+                </p>
+
+                <div class="btn-login">
+                {{ forms.raw_button(_('Update Organizational Information'), styles='btn') }}
+                </div>
+
+            {{ forms.endform() }}
+        </div>
+    </div>
+{% endblock content %}

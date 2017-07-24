@@ -11,7 +11,6 @@ import re
 from drive.utils.email_address import EmailAddress
 from drive.utils.i18n import _
 from datetime import date
-from drive.model.projects import ProjectVisibility
 
 def IsText(field):
     def text_validator(value):
@@ -97,7 +96,7 @@ class Form(Schema):
         return ''
 
 
-class CreateUserForm(Form):
+class UserForm(Form):
 
     first_name = fields.String(
         required=True,
@@ -109,4 +108,82 @@ class CreateUserForm(Form):
         required=True,
         validate=[validate.Length(min=1, max=255)],
         error_messages={'required': 'user last name is required'},
+    )
+
+    email = fields.Email(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'Email required'}
+    )
+
+class SignupForm(Form):
+    first_name = fields.String(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'First name required'}
+    )
+
+    last_name = fields.String(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'Last name required'}
+    )
+
+    email = fields.Email(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'Email required'}
+    )
+
+    password = fields.String(
+        required=True,
+        validate=validate.Length(min=8),
+        error_messages={'required': 'Password required'}
+    )
+
+    retype_password = fields.String(
+        required=True,
+        validate=validate.Length(min=8),
+        error_messages={'required': 'Retype Password required'}
+    )
+
+
+class LoginForm(Form):
+    email = fields.Email(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'Email required'}
+    )
+
+    password = fields.String(
+        required=True,
+        validate=[validate.Length(min=8)],
+        error_messages={'required': 'Password required'}
+    )
+
+class ChangePasswordForm(Form):
+    old_password = fields.String(
+        required=True,
+        validate=[validate.Length(min=8)],
+        error_messages={'required': 'Password required'}
+    )
+
+    new_password = fields.String(
+        required=True,
+        validate=[validate.Length(min=8)],
+        error_messages={'required': 'Password required'}
+    )
+
+    confirm_password = fields.String(
+        required=True,
+        validate=[validate.Length(min=8)],
+        error_messages={'required': 'Password required'}
+    )
+
+class ForgotPasswordForm(Form):
+    email = fields.Email(
+        required=True,
+        validate=[validate.Length(min=1, max=255)],
+        error_messages={'required': 'Email required'},
+        default="",
     )

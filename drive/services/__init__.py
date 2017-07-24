@@ -1,9 +1,12 @@
 from drive.model.meta.engine import get_engine
 from drive.model.meta.session import get_session_factory
 from drive.model.meta.session import get_tm_session
-# from pyramid_mailer import Mailer
+from pyramid_mailer import Mailer
 
-from .user import UserService
+from .account import AccountService
+from .login import LoginService
+from .mail import MailService
+
 
 log = __import__('logging').getLogger(__name__)
 
@@ -24,9 +27,26 @@ def includeme(config):
         return get_tm_session(dbmaker, request.tm)
     config.register_service_factory(db_factory, name='db')
 
-
-    def user_factory(context, request):
+    def account_factory(context, request):
         db = request.find_service(name='db')
-        svc = UserService(db)
+        svc = AccountService(db)
         return svc
-    config.register_service_factory(user_factory, UserService)
+    config.register_service_factory(account_factory, AccountService)
+
+    mailer = Mailer.from_settings(settings)
+    def mailer_factory(context, request):
+        return mailer.bind(transaction_manager=request.tm)
+    config.register_service_factory(mailer_factory, name='mailer')
+
+    def mail_service_factory(context, request):
+        mailer = request.find_service(name='mailer')
+        svc = MailService(settings=settings, mailer=mailer)
+        return svc
+    config.register_service_factory(mail_service_factory, MailService)
+
+    def login_factory(context, request):
+        db = request.find_service(name='db')
+        svc = LoginService(db)
+        return svc
+    config.register_service_factory(login_factory, LoginService)
+

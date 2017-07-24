@@ -70,7 +70,7 @@ def false_test(value):
 
 def true_test(value):
     return value is True
-
+    
 
 @jinja2.contextfunction
 def translate_value(ctx, value):

@@ -1,6 +1,6 @@
 {% macro make_unique_id(prefix) %}{{ prefix~'-'~uuid4().hex[:8] }}{% endmacro %}
 
-{% macro form(styles='', id=none, csrf_token=none, action=none, method=none, enctype=False) %}
+{% macro form(styles='', class=none, id=none, csrf_token=none, action=none, method=none, enctype=False) %}
 <form
   method={{ method or "post" }}
   {% if action %}action="{{ action }}"{% endif -%}

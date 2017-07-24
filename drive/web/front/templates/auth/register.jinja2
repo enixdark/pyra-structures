@@ -1,0 +1,43 @@
+{% import 'parts/forms.jinja2' as forms %}
+
+{% extends "layout/landing_layout.jinja2" %}
+
+{% set bg_wrapper = 'bg-image-login'  %}
+
+{% set script = 'validator' %}
+
+{% block content %}
+    <div class="login-box">
+        <div class="login-content">
+            <h2 class="login-title text-center">Create a New Account</h2>
+
+            {{ forms.form(csrf_token=csrf_token, id='signup-form', action=url('register'), styles='login-form')}}
+
+                {{ forms.text_field(label='First Name', name='first_name') }}
+
+                {{ forms.text_field(label='Last Name', name='last_name') }}
+
+                {{ forms.email_field(label='Email', name='email') }}
+
+                {{ forms.password_field(label='Password', name='password', help_text='Must be 8 letters or more.') }}
+
+                {{ forms.password_field(label='Retype Password', name='retype_password', help_text='Must be 8 letters or more.') }}
+
+                <p class="error-message">
+                    {% if form.has_error or error %}
+                        <span class="text-danger">{{ form.error_message() or error }}</span>
+                    {% endif %}
+                </p>
+
+                <div class="btn-login">
+                {{ forms.raw_button(_('CREATE A FREE ACCOUNT'), styles='btn') }}
+                </div>
+
+            {{ forms.endform() }}
+
+            <p class="login-text-link">
+                Already have an account? <a href="{{ url('login') }}">Login</a>
+            </p>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends 'layout/base.jinja2' %}
+{% import 'parts/forms.jinja2' as forms %}
+
+{% block main %}
+{{ forms.form(csrf_token=csrf_token, id='logout-form') }}
+  {{ forms.submit_button(_('Click to Logout')) }}
+{{ forms.endform() }}
+{% endblock main %}
+
+{% block scripts %}
+<script>
+$('#logout-form').submit();
+</script>
+{% endblock scripts %}

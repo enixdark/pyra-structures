@@ -2,26 +2,10 @@
 # flake8: noqa
 from sqlalchemy.orm import object_session
 
-from .user import (
+from .users import (
     User,
 )
 
-from .policy import (
-    Policy,
-)
-
-from .driver import (
-    Driver,
-)
-
-from .driver_policy import (
-    DriverPolicy,
-)
-
-from .estimation import (
-    Estimation,
-)
-
-from .group import (
-    Group
+from .accounts import (
+    Account
 )

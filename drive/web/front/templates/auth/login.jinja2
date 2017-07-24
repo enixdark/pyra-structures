@@ -1,0 +1,38 @@
+{% import 'parts/forms.jinja2' as forms %}
+{% extends "layout/landing_layout.jinja2" %}
+
+{% set bg_wrapper = 'bg-image-login' %}
+
+{% set script = 'login' %}
+
+{% block content %}
+    <div class="login-box">
+        <div class="login-content">
+            <h2 class="login-title text-center">Login</h2>
+            {{ forms.form(csrf_token=csrf_token, id='login-form', action=url('login'), styles='login-form')}}
+
+                {{ forms.email_field(label='Email', name='email') }}
+
+                {{ forms.password_field(label='Password', name='password') }}
+
+                <p class="error-message">
+                    {% if form.has_error or error %}
+                        <span class="text-danger">{{ form.error_message() or error }}</span>
+                    {% endif %}
+                </p>
+
+                <div class="btn-login">
+                {{ forms.raw_button(_('LOGIN'), styles='btn') }}
+                </div>
+
+            {{ forms.endform() }}
+
+            <p class="login-text-link"> 
+                <a href="{{ url('forgot.password') }}">Forgot your password?</a> 
+            </p>
+            <p class="login-text-link">
+                Need an account? <a href="{{ url('register') }}">Sign up for free</a>
+            </p>
+        </div>
+    </div>
+{% endblock content %}
