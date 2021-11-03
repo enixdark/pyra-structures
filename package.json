@@ -21,7 +21,7 @@
     "jquery": "^3.1.0",
     "jquery-validation": "^1.16.0",
     "moment": "^2.18.1",
-    "validator": "^5.5.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
