@@ -19,7 +19,7 @@
     "font-awesome": "^4.3.0",
     "highcharts": "^7.2.2",
     "jquery": "^3.1.0",
-    "jquery-validation": "^1.16.0",
+    "jquery-validation": "^1.19.5",
     "moment": "^2.18.1",
     "validator": "^5.5.0"
   },
