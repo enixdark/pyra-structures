@@ -19,7 +19,7 @@ iso8601==0.1.11
 jedi==0.10.2
 Jinja2==2.9.6
 jmespath==0.9.3
-Mako==1.0.6
+Mako==1.2.2
 MarkupSafe==1.0
 marshmallow==2.13.5
 packaging==16.8
