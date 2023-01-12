@@ -36,7 +36,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "del": "^2.0.2",
-    "eslint": "^3.2.2",
+    "eslint": "^4.18.2",
     "eslint-plugin-react": "^6.0.0",
     "gulp": "^3.9.0",
     "gulp-cached": "^1.1.0",
